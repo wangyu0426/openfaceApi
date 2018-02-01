@@ -18,7 +18,7 @@ class SnippetsConfig(AppConfig):
         # Singleton utility
         # We load them here to avoid multiple instantiation across other
         # modules, that would take too much time.
-        cwd = os.getcwd()
+        cwd = '/root/openfaceapi'
         global faceSvm  
         faceSvm = FaceApi((480,640, 3))
         faces = []
