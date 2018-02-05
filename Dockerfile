@@ -1,6 +1,6 @@
 FROM bamos/openface
 
-RUN	pip install django djangorestframework jsonfield channels asgi_redis django-cors-headers imagehash openface pygments
+RUN	pip install pathlib django djangorestframework jsonfield channels asgi_redis django-cors-headers imagehash openface pygments
 COPY . /root/openfaceapi
 RUN cd ~/openfaceapi && \
     pip install -r requirements.txt 
