@@ -17,7 +17,7 @@ import base64
 class faceSeek(APIView):
     parser_classes = (JSONParser,)
     def post(self,request,format = None):
-        im = Image.open(BytesIO(base64.b64decode(img)))
+        im = Image.open(BytesIO(base64.b64decode(request.data['images'][0])))
         width, height = im.size
         f = faceSvm.findIdentity(request.data['images'][0],False,True,(height,width, 3))
         return JsonResponse({'id':f})

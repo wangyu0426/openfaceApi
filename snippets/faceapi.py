@@ -136,7 +136,7 @@ class FaceApi:
         else:
             img = imgData
         buf = np.fliplr(np.asarray(img))
-        rgbFrame = np.zeros(self.res, dtype=np.uint8)
+        rgbFrame = np.zeros(res, dtype=np.uint8)
         rgbFrame[:, :, 0] = buf[:, :, 2]
         rgbFrame[:, :, 1] = buf[:, :, 1]
         rgbFrame[:, :, 2] = buf[:, :, 0]
