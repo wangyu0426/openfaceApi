@@ -10,38 +10,44 @@ from snippets.models import FaceData
 from snippets.serializers import FaceSerializer
 from snippets.apps import faceSvm
 from PIL import Image
+from io import BytesIO
+import base64
 
 
 class faceSeek(APIView):
     parser_classes = (JSONParser,)
-    def post(self,request,format = None):    
-        f = faceSvm.findIdentity(request.data['images'][0],False,True)  
+    def post(self,request,format = None):
+        im = Image.open(BytesIO(base64.b64decode(data)))
+        width, height = im.size
+        f = faceSvm.findIdentity(request.data['images'][0],False,True,(height,width, 3))
         return JsonResponse({'id':f})
 
 class faceTrain(APIView):
     parser_classes = (JSONParser,)
-    def post(self,request,identity,format = None): 
+    def post(self,request,identity,format = None):
         f=request.data['vector'];
         faceSvm.trainSVMwithData(f)
         return JsonResponse({'trained':True})
 class faceProcess(APIView):
     parser_classes = (JSONParser,)
-    def post(self,request,identity,format = None): 
+    def post(self,request,identity,format = None):
         f=[];
-        for img in request.data['images']: 
-            f.append(faceSvm.processImg(img,identity,False,True,None))
+        for img in request.data['images']:
+            im = Image.open(BytesIO(base64.b64decode(data)))
+            width, height = im.size
+            f.append(faceSvm.processImg(img,identity,False,True,(height,width, 3)))
         return JsonResponse(f)
 
 class svmDump(APIView):
     parser_classes = (JSONParser,)
-    def post(self,request,format = None):    
+    def post(self,request,format = None):
         f=request.data['svmPathAndName'];
         faceSvm.saveSvmToFile(f)
         return JsonResponse({'dumped':True})
 
 class svmLoad(APIView):
     parser_classes = (JSONParser,)
-    def post(self,request,identity,format = None): 
+    def post(self,request,identity,format = None):
         f=request.data['svmPathAndName'];
         faceSvm.loadSvmFromFile(f)
         return JsonResponse({'loaded':True})

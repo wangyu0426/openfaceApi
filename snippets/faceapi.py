@@ -9,7 +9,7 @@ import cv2
 import imagehash
 import json
 from PIL import Image
-from PIL import ImageFilter  
+from PIL import ImageFilter
 import numpy as np
 import StringIO
 import urllib
@@ -29,7 +29,7 @@ import openface
 
 
 class Face:
-    
+
     def __init__(self, rep, identity, phash):
         self.rep = rep
         self.identity = identity
@@ -97,10 +97,10 @@ class FaceApi:
         self.images[phash] = Face(rep, identity,phash)
         return Face(rep,identity,phash)
             #
-            #save     
+            #save
             #self.images[phash] = Face(rep, identity)
-            #self.people.append(name)   
-    def trainSVMwithData(self,images):   
+            #self.people.append(name)
+    def trainSVMwithData(self,images):
         # Face.rep -> rep
         # Face.identity -> identity
         # Face.phash -> id
@@ -110,7 +110,7 @@ class FaceApi:
             X.append(img.rep)
             y.append(img.identity)
         X = np.vstack(X)
-        y = np.array(y)        
+        y = np.array(y)
         param_grid = [
             {'C': [1, 10, 100, 1000],
                 'kernel': ['linear']},
@@ -121,7 +121,8 @@ class FaceApi:
         # svm = self.svm if self.svm is not None else GridSearchCV(SVC(C=1), param_grid, cv=5)
         self.svm = GridSearchCV(SVC(C=1), param_grid, cv=5).fit(X, y)
 
-    def findIdentity(self, imgData,isStram,isBase64):
+    def findIdentity(self, imgData,isStram,isBase64,res):
+        res = res if res is not None else self.res
         if isStram:
             imgF = StringIO.StringIO()
             imgF.write(imgData)
@@ -167,9 +168,9 @@ class FaceApi:
                 if identity not in identities:
                     identities.append(identity)
         return identities
-    
+
     def saveSvmToFile(self,filePathAndName):
-        joblib.dump(self.svm, filePathAndName) 
+        joblib.dump(self.svm, filePathAndName)
 
     def loadSvmFromFile(self,filePathAndName):
-        self.svm = joblib.load(filePathAndName) 
+        self.svm = joblib.load(filePathAndName)
