@@ -36,7 +36,7 @@ class faceProcess(APIView):
             im = Image.open(BytesIO(base64.b64decode(img)))
             width, height = im.size
             f.append(faceSvm.processImg(img,identity,False,True,(height,width, 3)))
-        return JsonResponse(f)
+        return JsonResponse(f, safe=False)
 
 class svmDump(APIView):
     parser_classes = (JSONParser,)
